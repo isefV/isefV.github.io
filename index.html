@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Youssef Alikhani</title>
+<meta name="description" content="Deep learning for time-series and sensor data (real-time signal processing, human activity recognition), computer vision, and real-time interactive systems.">
+<style>
+  :root {
+    --bg: #f7f7f5; --surface: #ffffff; --text: #1d1d1f; --muted: #6e6e73;
+    --line: #e6e6e3; --accent: #2a5a8c; --accent-soft: #e9f0f7;
+    --radius: 10px; --sidebar: 25%;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141416; --surface: #1c1c1f; --text: #ececee; --muted: #9a9aa1;
+      --line: #2c2c31; --accent: #8fb6e0; --accent-soft: #1f2a36;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  /* ---------- sidebar (1/4) */
+  .sidebar {
+    position: fixed; inset: 0 auto 0 0; width: var(--sidebar); min-width: 260px;
+    overflow-y: auto; padding: 56px 32px 32px;
+    background: var(--surface); border-right: 1px solid var(--line);
+    display: flex; flex-direction: column;
+  }
+  .avatar {
+    width: 112px; height: 112px; border-radius: 50%; object-fit: cover;
+    display: grid; place-items: center; margin-bottom: 24px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 2.2rem; font-weight: 600; letter-spacing: .02em;
+  }
+  .sidebar h1 { font-size: 1.6rem; line-height: 1.25; margin: 0 0 6px; letter-spacing: -.01em; }
+  .headline { color: var(--muted); margin: 0 0 28px; font-size: .95rem; line-height: 1.5; }
+  .contact { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 10px; font-size: .93rem; }
+  .contact li { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .contact a, .contact span { overflow-wrap: anywhere; }
+  .icon { width: 18px; height: 18px; flex: none; color: var(--muted); }
+  .button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px; border-radius: var(--radius);
+    background: var(--text); color: var(--bg); font-weight: 500; font-size: .93rem;
+  }
+  .button .icon { color: inherit; }
+  .button:hover { text-decoration: none; opacity: .88; }
+  .footer { margin-top: auto; padding-top: 32px; color: var(--muted); font-size: .8rem; }
+
+  /* ---------- main (3/4) */
+  main { margin-left: max(var(--sidebar), 260px); min-height: 100vh; }
+  .tabs {
+    position: sticky; top: 0; z-index: 1; display: flex; gap: 4px;
+    padding: 0 48px; background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); overflow-x: auto;
+  }
+  .tabs button {
+    appearance: none; border: 0; background: none; cursor: pointer; white-space: nowrap;
+    padding: 18px 14px 16px; font: inherit; font-size: .95rem; color: var(--muted);
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tabs button:hover { color: var(--text); }
+  .tabs button[aria-selected="true"] { color: var(--text); border-bottom-color: var(--text); font-weight: 500; }
+  [role="tabpanel"] { max-width: 860px; padding: 48px 48px 80px; animation: fade .25s ease; }
+  [role="tabpanel"][hidden] { display: none; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { [role="tabpanel"] { animation: none; } }
+
+  h2 { font-size: 1.9rem; letter-spacing: -.02em; line-height: 1.2; margin: 0 0 28px; }
+  h3 {
+    font-size: .78rem; font-weight: 600; text-transform: uppercase; letter-spacing: .09em;
+    color: var(--muted); margin: 40px 0 16px;
+  }
+  .group:first-of-type h3, .skill h3 { margin-top: 0; }
+  h4 { font-size: 1.04rem; margin: 0; line-height: 1.4; }
+  p { margin: 0 0 12px; }
+  .prose p { font-size: 1.06rem; max-width: 68ch; margin-bottom: 18px; }
+  .meta, .org { color: var(--muted); font-size: .93rem; margin: 2px 0 0; }
+
+  /* timeline: date column + content */
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline > li {
+    display: grid; grid-template-columns: 11rem 1fr; gap: 24px;
+    padding: 18px 0; border-top: 1px solid var(--line);
+  }
+  .timeline > li:first-child { border-top: 0; padding-top: 0; }
+  .when { color: var(--muted); font-size: .88rem; padding-top: 2px; font-variant-numeric: tabular-nums; }
+  .what ul { margin: 10px 0 0; padding-left: 18px; }
+  .what ul li { margin: 4px 0; }
+  .what ul li::marker { color: var(--muted); }
+  .what > p:not(.meta):not(.org) { margin-top: 8px; }
+
+  .chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0; }
+  .chips li {
+    padding: 5px 12px; border-radius: 999px; font-size: .88rem;
+    background: var(--surface); border: 1px solid var(--line);
+  }
+  .chips.small { margin-top: 14px; gap: 6px; }
+  .chips.small li { padding: 2px 9px; font-size: .78rem; color: var(--muted); }
+  .skills { display: grid; gap: 28px; }
+
+  .plain { list-style: none; padding: 0; margin: 0; }
+  .pub { padding: 16px 0; border-top: 1px solid var(--line); }
+  .pub:first-child { border-top: 0; padding-top: 0; }
+  .pub-title { font-weight: 600; margin: 0 0 4px; }
+  .badge {
+    font-size: .72rem; font-weight: 500; padding: 2px 8px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent); vertical-align: middle; text-transform: capitalize;
+  }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .card {
+    padding: 20px; border-radius: var(--radius);
+    background: var(--surface); border: 1px solid var(--line);
+  }
+  .card h4 { margin-bottom: 8px; }
+  .card p { color: var(--muted); font-size: .93rem; margin: 0; }
+
+  /* ---------- small screens: sidebar on top */
+  @media (max-width: 860px) {
+    .sidebar { position: static; width: auto; min-width: 0; border-right: 0; border-bottom: 1px solid var(--line); padding: 32px 24px; }
+    .avatar { width: 88px; height: 88px; font-size: 1.8rem; margin-bottom: 16px; }
+    .footer { display: none; }
+    main { margin-left: 0; }
+    .tabs { padding: 0 16px; }
+    [role="tabpanel"] { padding: 32px 24px 64px; }
+    .timeline > li { grid-template-columns: 1fr; gap: 4px; }
+  }
+  @media print {
+    .tabs, .button { display: none; }
+    .sidebar { position: static; width: auto; border: 0; }
+    main { margin: 0; }
+    [role="tabpanel"][hidden] { display: block; }
+  }
+</style>
+</head>
+<body>
+<aside class="sidebar">
+
+    <div class="avatar" aria-hidden="true">YA</div>
+    <h1>Youssef Alikhani</h1>
+    <p class="headline">M.Sc. student in Artificial Intelligence · Deep learning for signals</p>
+    <ul class="contact"><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><a href="mailto:yalikhani80@gmail.com">yalikhani80@gmail.com</a></li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Tehran, Iran</span></li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><a href="https://github.com/isefV" target="_blank" rel="noopener">GitHub</a></li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><a href="https://www.linkedin.com/in/yousef-alikhani-94922a234" target="_blank" rel="noopener">LinkedIn</a></li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><a href="https://scholar.google.com/citations?user=ooiw1CkAAAAJ" target="_blank" rel="noopener">Google Scholar</a></li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><a href="https://orcid.org/0009-0000-2574-5277" target="_blank" rel="noopener">ORCID</a></li></ul>
+    <a class="button" href="Alikhani_Youssef_CV.pdf" download><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 11v6m-3-3 3 3 3-3"/></svg>Download CV</a>
+  <p class="footer">© <span id="year"></span> Youssef Alikhani</p>
+</aside>
+<main>
+  <nav class="tabs" role="tablist" aria-label="Sections"><button role="tab" id="tab-bio" aria-controls="panel-bio" aria-selected="true">Bio</button><button role="tab" id="tab-career" aria-controls="panel-career" aria-selected="false" tabindex=-1>Career</button><button role="tab" id="tab-skills" aria-controls="panel-skills" aria-selected="false" tabindex=-1>Skills</button><button role="tab" id="tab-achievements" aria-controls="panel-achievements" aria-selected="false" tabindex=-1>Achievements</button></nav>
+  <section role="tabpanel" id="panel-bio" aria-labelledby="tab-bio"><h2>About me</h2><div class="prose"><p>I am an M.Sc. student in Computer Science (Artificial Intelligence) at the University of Tehran, advised by Dr. Bagher BabaAli. My research focuses on deep learning for time-series and sensor data, and my thesis studies offline handwritten text modeling with vision-language and diffusion models.</p><p>Alongside my studies, I work as a C++ desktop developer and deep learning researcher: I build real-time Qt applications that acquire, process, and visualize sensor signals, and I train deep learning models on this data. In 2025 I was part of the team that won 1st place in the Sussex-Huawei Locomotion Challenge (Task 1).</p><p>What I bring is the combination of both sides: solid C++ engineering for real-time systems and modern deep learning research. I am looking for a PhD position starting in 2027.</p></div><h3>Research interests</h3><ul class="chips"><li>Time-series deep learning</li><li>Real-time signal processing</li><li>Human activity recognition</li><li>Computer vision</li><li>Game development</li></ul></section><section role="tabpanel" id="panel-career" aria-labelledby="tab-career" hidden><h2>Career</h2><section class="group"><h3>Education</h3><ol class="timeline"><li><div class="when">Sep 2024 – expected Jun 2027</div><div class="what"><h4>M.Sc. in Computer Science (Artificial Intelligence)</h4><p class=org>University of Tehran · Tehran, Iran</p><p class='meta'>Thesis: <em>Offline Handwritten Text Modeling using VLM &amp; Diffusion Models</em></p><p class='meta'>Advisor: Dr. Bagher BabaAli</p><p class='meta'>GPA: 15.56/20</p></div></li><li><div class="when">Sep 2020 – Jun 2024</div><div class="what"><h4>B.Sc. in Computer Science</h4><p class=org>University of Mohaghegh Ardabili · Ardabil, Iran</p><p class='meta'>GPA: 18.29/20</p></div></li></ol></section><section class="group"><h3>Research experience</h3><ol class="timeline"><li><div class="when">Apr 2025 – Present</div><div class="what"><h4>Research Assistant</h4><p class=org>University of Tehran · Tehran, Iran</p><p class='meta'>Supervisor: Dr. Bagher BabaAli</p><ul><li>Member of the research team that won 1st place in the Sussex-Huawei Locomotion (SHL) Challenge 2025 (Task 1), recognizing locomotion and transportation modes from smartphone sensor data with an ensemble of time-series foundation models; co-authored the resulting paper at the HASCA Workshop, UbiComp/ISWC 2025.</li></ul></div></li></ol></section><section class="group"><h3>Professional experience</h3><ol class="timeline"><li><div class="when">Mar 2025 – Present</div><div class="what"><h4>C++ Desktop Developer and Deep Learning Researcher</h4><p class=org>Confidential company · Tehran, Iran</p><ul><li>Develop real-time Qt desktop applications in C++ for acquiring, processing, and visualizing sensor signals.</li><li>Built a multi-threaded data pipeline with Taskflow and ZeroMQ (cppzmq) for low-latency processing and inter-process communication.</li><li>Developed C++ simulators that generate synthetic signal data for signal-processing and deep learning tasks.</li><li>Develop deep learning models for processing the acquired and simulated signal data.</li></ul></div></li><li><div class="when">Mar 2024 – Oct 2024</div><div class="what"><h4>Video Surveillance Engineer</h4><p class=org>Security systems company (banking sector) · Mashhad, Iran</p><ul><li>Worked with IP camera and NVR-based video surveillance systems for bank security.</li></ul></div></li></ol></section><section class="group"><h3>Teaching experience</h3><ol class="timeline"><li><div class="when"></div><div class="what"><h4>Teaching Assistant</h4><p class=org>University of Mohaghegh Ardabili · Ardabil, Iran</p><ul><li>Computer Programming.</li><li>Deep Learning.</li></ul></div></li></ol></section></section><section role="tabpanel" id="panel-skills" aria-labelledby="tab-skills" hidden><h2>Skills</h2><div class="skills"><div class="skill"><h3>Programming</h3><ul class="chips"><li>C++</li><li>Python</li></ul></div><div class="skill"><h3>Machine learning</h3><ul class="chips"><li>PyTorch</li><li>NumPy</li><li>OpenCV</li></ul></div><div class="skill"><h3>C++ libraries</h3><ul class="chips"><li>Qt</li><li>Boost</li><li>Armadillo</li><li>Taskflow</li><li>ZeroMQ (cppzmq)</li><li>FreeRTOS</li><li>GoogleTest</li></ul></div><div class="skill"><h3>Graphics and games</h3><ul class="chips"><li>Godot</li><li>raylib</li><li>Dear ImGui</li></ul></div><div class="skill"><h3>Tools</h3><ul class="chips"><li>Git</li><li>Linux</li><li>CMake</li></ul></div><div class="skill"><h3>Languages</h3><ul class="chips"><li>Persian (Native)</li><li>English</li></ul></div></div></section><section role="tabpanel" id="panel-achievements" aria-labelledby="tab-achievements" hidden><h2>Achievements</h2><section class="group"><h3>Publications</h3><ul class="plain"><li class="pub"><p class="pub-title">Ensemble of foundation models for sensor-based locomotion and transportation mode recognition</p><p class="meta">Mohammad Foad Abdi, <strong>Yousef Alikhani</strong>, Mohammad Mahdi Azizi, Bagher BabaAli, Mehdi Mohebbi, Arash Nasr Esfahani</p><p class="meta"><em>Companion of the 2025 ACM International Joint Conference on Pervasive and Ubiquitous Computing (UbiComp/ISWC '25), pp. 949-955</em>, 2025. <a href="https://doi.org/10.1145/3714394.3756217" target="_blank" rel="noopener">Paper ↗</a></p></li></ul></section><section class="group"><h3>Honors &amp; awards</h3><ol class="timeline"><li><div class="when">Oct 2025</div><div class="what"><h4>1st Place, Sussex-Huawei Locomotion (SHL) Challenge 2025 (Task 1), team member</h4><p class=org>University of Sussex &amp; Huawei, HASCA Workshop at UbiComp/ISWC 2025</p><p>International competition on locomotion and transportation mode recognition from smartphone sensor data.</p></div></li></ol></section><section class="group"><h3>Projects</h3><div class="cards"><article class="card"><h4><a href="https://github.com/isefV/ims600-demo" target="_blank" rel="noopener">IMS600 ↗</a></h4><p>Standalone C++/Qt desktop application for controlling and monitoring an Ion Mobility Spectrometry (IMS) instrument: live signal visualization, spectrum detection, calibration, and device control (high voltage, pulse generator, pump, heater, valves).</p><ul class="chips small"><li>c++</li><li>signal processing</li><li>real-time</li></ul></article></div></section></section>
+</main>
+<script>
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  function show(id, focus) {
+    const tab = document.getElementById('tab-' + id);
+    if (!tab) return;
+    for (const t of tabs) {
+      const on = t === tab;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    }
+    if (focus) tab.focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => {
+      const id = t.id.slice(4);  // tab-<id>; panels are panel-<id> so the hash never scrolls
+      show(id);
+      history.replaceState(null, '', '#' + id);
+      window.scrollTo({ top: 0 });
+    });
+    t.addEventListener('keydown', e => {
+      const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (step) { e.preventDefault(); tabs[(i + step + tabs.length) % tabs.length].click(); tabs[(i + step + tabs.length) % tabs.length].focus(); }
+    });
+  });
+  show(location.hash.slice(1));
+  window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
